@@ -17,6 +17,10 @@ StandingDesk::StandingDesk(byte minPosition, byte maxPosition, byte recordedPosi
 }
 
 void StandingDesk::setPosition(byte newPosition) {
+  if (!isBetween(newPosition, _minPosition, _maxPosition)) {
+    //TODO: Mostrar error en pantalla
+    return;
+  }
   _desiredPosition = newPosition;
   _moving = true;
 }
@@ -42,7 +46,12 @@ void StandingDesk::recordPosition(byte number, byte position) {
     //TODO: Mostrar error en pantalla
     return;
   }
-  //TODO: Validar que position este dentro del rango permitido
+
+  if (!isBetween(position, _minPosition, _maxPosition)) {
+    //TODO: Mostrar error en pantalla
+    return;
+  }
+
   byte index = number - 1;
   byte existingValue = EEPROM.read(index);
   if (existingValue != position) {
@@ -74,6 +83,10 @@ void StandingDesk::move() {
   setMotorsDirection(actualPosition, _desiredPosition);
   moveMotors();
   validateCollisions();
+}
+
+void StandingDesk::cancelMovement() {
+  stopMotors();
 }
 
 void StandingDesk::setMotorsDirection(byte actualPosition, byte desiredPosition) {
@@ -110,4 +123,8 @@ void StandingDesk::validateCollisions() {
   if (existCollisions) {
     stopMotors();
   }
+}
+
+bool isBetween(byte v, byte min, byte max) {
+  return v >= min && v <= max;
 }

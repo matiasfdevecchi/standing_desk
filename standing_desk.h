@@ -13,6 +13,7 @@ class StandingDesk {
     void recordPosition(byte number, byte position);
     void deleteRecordedPosition(byte number);
     void move();
+    void cancelMovement();
   private:
     byte _minPosition;
     byte _maxPosition;
