@@ -1,6 +1,8 @@
 #include "standing_desk.h"
 #include <EEPROM.h>
 
+bool isBetween(byte v, byte min, byte max);
+
 StandingDesk::StandingDesk(byte minPosition, byte maxPosition, byte recordedPositionQuantity, byte relayPin1, byte relayPin2, byte positionTriggerPin, byte positionEchoPin) {
   //TODO: Crear y setear sensor vibracion
   relay1 = new Relay(relayPin1);
@@ -11,7 +13,7 @@ StandingDesk::StandingDesk(byte minPosition, byte maxPosition, byte recordedPosi
   _maxPosition = maxPosition;
   _recordedPositionQuantity = recordedPositionQuantity;
   
-  _desiredPosition = position->getValue();
+  _desiredPosition = position->getHeightInCentimeters();
   _moving = false;
   _movingDirection = 0;
 }
@@ -74,7 +76,7 @@ void StandingDesk::deleteRecordedPosition(byte number) {
 void StandingDesk::move() {
   if (!_moving) return;
   
-  int actualPosition = 0; //TODO: obtener actual position del sensor
+  int actualPosition = position->getHeightInCentimeters();
   if (_desiredPosition == actualPosition) {
     stopMotors();
     return;

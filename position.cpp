@@ -10,7 +10,7 @@ Position::Position(int trigPin, int echoPin) {
   _echoPin = echoPin;
 }
 
-float Position::getValue() {
+float Position::getHeightInCentimeters() {
    // Clears the trigPin condition
   digitalWrite(_trigPin, LOW);
   delayMicroseconds(2);

@@ -6,7 +6,7 @@
 class Position {
   public:
     Position(int trigPin, int echoPin);
-    int getValue();
+    float getHeightInCentimeters();
 
   private:
     int _trigPin;
