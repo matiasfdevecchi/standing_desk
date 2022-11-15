@@ -2,33 +2,45 @@
 #define StandingDesk_h
 
 #include "Arduino.h"
-#include "relay.h"
 #include "position.h"
+#include "engines_controller.h"
+#include "keypad_controller.h"
+
+typedef struct StandingDeskParams {
+  uint8_t minPosition;
+  uint8_t maxPosition;
+  uint8_t recordedPositionQuantity;
+  engines_controller_params_t enginesControllerParams;
+  position_params_t positionParams;
+} standing_desk_params_t;
 
 class StandingDesk {
   public:
-    StandingDesk(byte minPosition, byte maxPosition, byte recordedPositionQuantity, byte relayPin1, byte relayPin2, byte positionTriggerPin, byte positionEchoPin);
-    void setPosition(byte newPosition);
-    void setRecordedPosition(byte number);
-    void recordPosition(byte number, byte position);
-    void deleteRecordedPosition(byte number);
+    StandingDesk(standing_desk_params_t params);
+    void loop();
+  private:
+    uint8_t _minPosition;
+    uint8_t _maxPosition;
+    uint8_t _recordedPositionQuantity;
+    uint8_t _desiredPosition;
+    bool _moving;
+    String _digits;
+
+    KeypadController* _keypadController;
+    EnginesController* _enginesController;
+    Position* _position;
+    
+    void setPosition(uint8_t newPosition);
+    void setRecordedPosition(uint8_t number);
+    void recordPosition(uint8_t number, uint8_t position);
+    void deleteRecordedPosition(uint8_t number);
     void move();
     void cancelMovement();
-  private:
-    byte _minPosition;
-    byte _maxPosition;
-    byte _recordedPositionQuantity;
-    byte _desiredPosition;
-    bool _moving;
-    byte _movingDirection; //0 - Quieto, 1 - Arriba, 2 - Abajo
-
-    Relay* relay1;
-    Relay* relay2;
-    Position* position;
-    
-    void setMotorsDirection(byte actualPosition, byte desiredPosition);
+    void analyzeKey(char key);
+    void setMotorsDirection(float actualPosition, uint8_t desiredPosition);
     void setDefaultDirection();
-    void moveMotors();
+    uint8_t getMotorsPower(float actualPosition, uint8_t desiredPosition);
+    void moveMotors(uint8_t power);
     void stopMotors();
     void validateCollisions();
 };

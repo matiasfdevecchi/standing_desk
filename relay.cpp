@@ -1,6 +1,6 @@
 #include "relay.h"
 
-Relay::Relay(int pin) {
+Relay::Relay(uint8_t pin) {
   _pin = pin;
   pinMode(pin, OUTPUT);
   digitalWrite(pin, LOW);

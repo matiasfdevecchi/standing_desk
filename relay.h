@@ -5,11 +5,11 @@
 
 class Relay {
   public:
-    Relay(int pin);
+    Relay(uint8_t pin);
     void on();
     void off();
   private:
-    int _pin;
+    uint8_t _pin;
     bool _value;
 };
 

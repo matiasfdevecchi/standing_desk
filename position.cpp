@@ -1,13 +1,10 @@
 #include "Position.h"
 
-Position::Position(int trigPin, int echoPin) {
-  pinMode(trigPin, OUTPUT); // Sets the trigPin as an OUTPUT
-  pinMode(echoPin, INPUT); // Sets the echoPin as an INPUT
-  Serial.begin(9600); // // Serial Communication is starting with 9600 of baudrate speed
-  Serial.println("Ultrasonic Sensor HC-SR04 Test"); // print some text in Serial Monitor
-  Serial.println("with Arduino UNO R3");
-  _trigPin = trigPin;
-  _echoPin = echoPin;
+Position::Position(position_params_t params) {
+  _trigPin = params.trigPin;
+  _echoPin = params.echoPin;
+  pinMode(_trigPin, OUTPUT); // Sets the trigPin as an OUTPUT
+  pinMode(_echoPin, INPUT); // Sets the echoPin as an INPUT
 }
 
 float Position::getHeightInCentimeters() {

@@ -3,14 +3,19 @@
 
 #include "Arduino.h"
 
+typedef struct PositionParams {
+    uint8_t trigPin;
+    uint8_t echoPin;
+} position_params_t;
+
 class Position {
   public:
-    Position(int trigPin, int echoPin);
+    Position(position_params_t params);
     float getHeightInCentimeters();
 
   private:
-    int _trigPin;
-    int _echoPin;
+    uint8_t _trigPin;
+    uint8_t _echoPin;
 };
 
 #endif
