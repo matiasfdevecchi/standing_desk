@@ -3,6 +3,7 @@
 
 #include "Arduino.h"
 #include "position.h"
+#include "display.h"
 #include "engines_controller.h"
 #include "keypad_controller.h"
 
@@ -29,12 +30,13 @@ class StandingDesk {
     KeypadController* _keypadController;
     EnginesController* _enginesController;
     Position* _position;
+    Display* _display;
     
     void setPosition(uint8_t newPosition);
     void setRecordedPosition(uint8_t number);
     void recordPosition(uint8_t number, uint8_t position);
     void deleteRecordedPosition(uint8_t number);
-    void move();
+    void move(float currentPosition);
     void cancelMovement();
     void analyzeKey(char key);
     void setMotorsDirection(float actualPosition, uint8_t desiredPosition);

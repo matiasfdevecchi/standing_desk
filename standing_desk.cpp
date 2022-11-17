@@ -1,5 +1,6 @@
 #include "standing_desk.h"
 #include <EEPROM.h>
+#include <math.h>
 
 bool isBetween(uint8_t v, uint8_t min, uint8_t max);
 void serialPrint(String msg1, uint8_t v1);
@@ -13,6 +14,7 @@ StandingDesk::StandingDesk(standing_desk_params_t params) {
   _enginesController = new EnginesController(params.enginesControllerParams);
   _position = new Position(params.positionParams);
   _keypadController = new KeypadController();
+  _display = new Display();
   
   _minPosition = params.minPosition;
   _maxPosition = params.maxPosition;
@@ -29,7 +31,10 @@ void StandingDesk::loop() {
     analyzeKey(key);
   }
   
-  move();
+  float currentPosition = _position->getHeightInCentimeters();
+  serialPrint("Current position: ", currentPosition);
+  _display->setCurrentPosition(currentPosition);
+  move(currentPosition);
 }
 
 void StandingDesk::analyzeKey(char key) {
@@ -119,20 +124,18 @@ void StandingDesk::deleteRecordedPosition(uint8_t number) {
   }
 }
 
-void StandingDesk::move() {
+void StandingDesk::move(float currentPosition) {
   if (!_moving) return;
-  delay(1000);
   
-  float actualPosition = _position->getHeightInCentimeters();
-  if (abs(_desiredPosition - actualPosition) < 0.5) {
+  if (abs(_desiredPosition - currentPosition) < 0.5) {
     serialPrint("Position", _desiredPosition, "arrived");
     stopMotors();
     return;
   }
 
-  serialPrint("Actual position", actualPosition, ". Desired position", _desiredPosition);
-  setMotorsDirection(actualPosition, _desiredPosition);
-  uint32_t power = getMotorsPower(actualPosition, _desiredPosition);
+  serialPrint("Actual position", currentPosition, ". Desired position", _desiredPosition);
+  setMotorsDirection(currentPosition, _desiredPosition);
+  uint32_t power = getMotorsPower(currentPosition, _desiredPosition);
   moveMotors(power);
   validateCollisions();
 }
