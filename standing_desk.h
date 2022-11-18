@@ -11,7 +11,6 @@ typedef struct StandingDeskParams {
   uint8_t minPosition;
   uint8_t maxPosition;
   uint8_t recordedPositionQuantity;
-  engines_controller_params_t enginesControllerParams;
   position_params_t positionParams;
 } standing_desk_params_t;
 

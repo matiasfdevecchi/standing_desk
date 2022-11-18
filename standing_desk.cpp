@@ -11,7 +11,7 @@ void serialPrint(String msg1, uint8_t v1, String msg2, uint8_t v2, String msg3);
 
 StandingDesk::StandingDesk(standing_desk_params_t params) {
   //TODO: Crear y setear sensor vibracion
-  _enginesController = new EnginesController(params.enginesControllerParams);
+  _enginesController = new EnginesController();
   _position = new Position(params.positionParams);
   _keypadController = new KeypadController();
   _display = new Display();
@@ -59,6 +59,7 @@ void StandingDesk::analyzeKey(char key) {
     Serial.print("Digits: ");
     Serial.println(_digits);
   }
+  _display->setCommand(_digits);
 }
 
 void StandingDesk::setPosition(uint8_t newPosition) {
@@ -125,7 +126,10 @@ void StandingDesk::deleteRecordedPosition(uint8_t number) {
 }
 
 void StandingDesk::move(float currentPosition) {
-  if (!_moving) return;
+  if (!_moving) {
+    _enginesController->setPower(0);
+    return;
+  }
   
   if (abs(_desiredPosition - currentPosition) < 0.5) {
     serialPrint("Position", _desiredPosition, "arrived");
@@ -169,8 +173,8 @@ void StandingDesk::moveMotors(uint8_t power) {
 void StandingDesk::stopMotors() {
   Serial.println("Stoping motors");
   _moving = false;
-  _enginesController->setDirection(DIRECTION_DEFAULT);
   _enginesController->setPower(0);
+  _enginesController->setDirection(DIRECTION_DEFAULT);
 }
 
 void StandingDesk::validateCollisions() {

@@ -9,7 +9,7 @@ class Display {
   public:
     Display();
     void setCurrentPosition(uint8_t v);
-    void setCommand(const char* v);
+    void setCommand(String v);
     void clear();
 
   private:

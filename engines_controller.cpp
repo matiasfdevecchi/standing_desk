@@ -1,37 +1,44 @@
 #include "engines_controller.h"
 
-EnginesController::EnginesController(engines_controller_params_t params) {
-  _directionPins = params.directionPins;
-  _directionPinsLength = params.directionPinsLength;
-  _powerPins = params.powerPins;
-  _powerPinsLength = params.powerPinsLength;
+EnginesController::EnginesController() {
+  _directionPin = 11;
+  _powerPin = 10;
 
-  for (uint8_t i = 0; i < _directionPinsLength; i++)
-    pinMode(_directionPins[i], OUTPUT);
+  pinMode(_directionPin, OUTPUT);
   setDirection(DIRECTION_DEFAULT);
     
-  for (uint8_t i = 0; i < _powerPinsLength; i++)
-    pinMode(_powerPins[i], OUTPUT);
+  pinMode(_powerPin, OUTPUT);
   setPower(0);
   
 }
 
 void EnginesController::setDirection(Direction dir) {
   uint8_t value = LOW;
-  if (dir == DIRECTION_DOWN)
+  if (dir == DIRECTION_UP)
     value = HIGH;
 
-  for (uint8_t i = 0; i < _directionPinsLength; i++)
-    digitalWrite(_directionPins[i], value);
+  digitalWrite(_directionPin, value);
   
 }
 
 void EnginesController::setPower(uint8_t power) {
-  //Para rele. Cambiar para transistor
-  uint8_t value = LOW;
+  uint8_t value = HIGH;
+  if (power != 0)
+    value = LOW;
+    
+  Serial.print("Engines controller: move ");
+  Serial.println(value);
+  //Para rele
+  /* uint8_t value = LOW;
   if (power > 100)
     value = HIGH;
 
   for (byte i = 0; i < _powerPinsLength; i++)
     digitalWrite(_powerPins[i], value);
+  */
+
+  //Para transistor
+  Serial.print("Power pin: ");
+  Serial.println(_powerPin);
+  digitalWrite(_powerPin, value);
 }

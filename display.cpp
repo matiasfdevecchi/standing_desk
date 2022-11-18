@@ -7,12 +7,19 @@ Display::Display() {
 }
 
 void Display::setCurrentPosition(uint8_t v) {
-  Serial.println(sprintf("Display: current position %u", v));
+  Serial.print("Display: current position ");
+  Serial.println(v);
   _display->home();
-  _display->print(sprintf("Posicion: %u", v));
+  _display->print("Position: ");
+  _display->setCursor(10, 0);
+  _display->print("   ");
+  _display->setCursor(10, 0);
+  _display->print(v);
 }
 
-void Display::setCommand(const char* v) {
+void Display::setCommand(String v) {
+  _display->setCursor(0,1);
+  _display->print("                ");
   _display->setCursor(0,1);
   _display->print(v);
 }
