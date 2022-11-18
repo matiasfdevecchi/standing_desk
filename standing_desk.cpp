@@ -187,7 +187,7 @@ void StandingDesk::validateCollisions() {
 uint8_t StandingDesk::getMotorsPower(float actualPosition, uint8_t desiredPosition) {
   uint8_t breakPoint = 5;
   uint8_t diff = min(breakPoint, abs(desiredPosition - actualPosition));
-  return map(diff, 0, breakPoint, 0, 255);
+  return map(diff, 0, breakPoint, 80, 255);
 }
 
 bool isBetween(uint8_t v, uint8_t min, uint8_t max) {

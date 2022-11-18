@@ -22,7 +22,7 @@ void EnginesController::setDirection(Direction dir) {
 }
 
 void EnginesController::setPower(uint8_t power) {
-  uint8_t value = HIGH;
+  /*uint8_t value = HIGH;
   if (power != 0)
     value = LOW;
     
@@ -35,10 +35,12 @@ void EnginesController::setPower(uint8_t power) {
 
   for (byte i = 0; i < _powerPinsLength; i++)
     digitalWrite(_powerPins[i], value);
-  */
+  
 
   //Para transistor
   Serial.print("Power pin: ");
   Serial.println(_powerPin);
-  digitalWrite(_powerPin, value);
+  digitalWrite(_powerPin, value);*/
+  uint8_t value = 255 - power;
+  analogWrite(_powerPin, value);
 }
